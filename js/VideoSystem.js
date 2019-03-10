@@ -207,7 +207,7 @@ var VideoSystem = (function () { //La función anónima devuelve un método getI
 				if(getDirectorPosition(director)===-1){
 					throw new NotExistException("director");
 				}
-				//Si todo va bien añado el direcctor.
+				//Si todo va bien borro el direcctor.
 				var post = getDirectorPosition(director);//Busco el indice del elemento.
 				_directores.splice(post,1);
 				//Devuelvo el número de elementos del array de directores.
@@ -279,8 +279,6 @@ var VideoSystem = (function () { //La función anónima devuelve un método getI
 				//Si todo va bien añado la producción.
 				var post = getProductionPosition(production);//Busco el indice del elemento que me han pasado.
 				_productions.splice(post,1);
-				//Tengo que borrar también de actores y directores, buscando quien tiene ese producción y en que 
-				// posición. (GetCast)
 				//Devuelvo el número de elementos del array de producciones.
 				return _productions.length;
 			}
@@ -350,13 +348,10 @@ var VideoSystem = (function () { //La función anónima devuelve un método getI
 				if(!actorExist(actor)){
 					throw new NotExistException("actor");
 				}
-				//Si todo va bien añado el usuario.
-				for(var i = 0; i<_actors.length; i++){
-					if(_actors[i].name === actor.name && _actors[i].lastname1 === actor.lastname1){ 
-						//Busco el indice del elemento que me han pasado comparando nombre y el primer apellido.						//Busco el indice del elemento que me han pasado comparando el título.
-						_actors.splice(i,1);
-					}
-				}
+				//Busco el indice del elemento que me han pasado comparando nombre y el primer apellido.						//Busco el indice del elemento que me han pasado comparando el título.
+				var post = getActorPosition(actor);//Busco el indice del elemento.
+				_actors.splice(post,1);
+			
 				//Devuelvo el número de elementos del array de actores.
 				return _actors.length;
 			}
@@ -417,7 +412,7 @@ var VideoSystem = (function () { //La función anónima devuelve un método getI
 				if(getCategoryPosition(categoria)===-1){
 					throw new NotExistException("categoria");
 				}
-				//Si todo va bien lo añado.
+				//Si todo va bien lo borro.
 				var post = getCategoryPosition(categoria); 
 				//Busco el indice del elemento que me han pasado comparando el nombre.
 				_categorias.splice(post,1);

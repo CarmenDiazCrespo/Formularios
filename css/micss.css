@@ -3,8 +3,11 @@
     margin: 0;
     padding: 0;
 }
-header{
-    background-color:darkgray;
+.header-rec{
+    margin-bottom: 20px;
+    padding: 0px;
+}
+.header-vs{
     margin-top: 50px;
     margin-bottom: 20px;
     padding: 0px;
@@ -12,7 +15,6 @@ header{
 .logo{
     height: 143px;
     width: auto;
-    
 }
 .head-cont{
     display: flex;
@@ -21,6 +23,9 @@ header{
 }
 .a-head{
     margin: 0;
+}
+.a-head:hover{
+    color: #b3b3b3;
 }
 .head-guay{
     padding: 0px;
@@ -33,7 +38,7 @@ header{
     width: auto;
 }
 .inst{
-    margin: 25%;
+    margin: 13px;
     height: 50px;
     width: auto;
 }
@@ -45,7 +50,9 @@ main{
 	
 }
 .redes-sociales{
-	margin-left: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .container {
     width: 970px;
@@ -79,7 +86,9 @@ a{
 	color: #660099;
     cursor: pointer;
 }
-
+a:hover{
+    color:black;
+}
 body{
 	background-color: #f7e6ff;
 }
@@ -97,4 +106,35 @@ header a{
 .divFotoCar{
     margin: 0 auto;
     float: none;
+}
+.btnInfo {
+    color: #33004d;
+    width: 100%;
+}
+.btn-group-vertical{
+    width: 100%;
+}
+.title{
+    text-align: center;
+}
+#pass, #userN{
+	width: 50%;
+}
+.group-login{
+	margin: 15px;
+}
+#btn-login{
+	width: 9%;
+}
+.btn-form{
+    position: relative;
+    float: right;
+    width: 20%;
+}
+.div-btn-form{
+   position: absolute;
+}
+#nav-forms{
+    display: flex;
+    justify-content: left;
 }

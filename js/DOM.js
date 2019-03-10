@@ -26,22 +26,34 @@ function crearObjetos(){
     var re1= new Resource("59:20","www.w3school.com");
     var re2= new Resource("229:10","www.gnula.nu");
     var re3= new Resource("05:00","www.gnula.nu");
+    var re4= new Resource("59:20","www.w3school.com");
+    var re5= new Resource("229:10","www.gnula.nu");
+    var re6= new Resource("05:00","www.gnula.nu");
     //Objetos de production
     var pro1= new Movie("Red2","USA","2025-02-25");
     pro1.resource= re1;
     pro1.image="imagenes/red2.jpg";
+    pro1.synopsis="Frank Moses (Bruce Willis), agente retirado de la CIA, vuelve a reunir a su peculiar equipo de élite para emprender la búsqueda de un dispositivo nuclear portátil desaparecido. Durante la operación tendrán que enfrentarse a un ejército de implacables asesinos, despiadados terroristas y oficiales del Gobierno enloquecidos por el poder. Todos ellos están ansiosos por hacerse con el arma letal, pero no son conscientes de lo que significa enfrentarse al equipo de Retirados Extremadamente Peligrosos y sus tácticas de la vieja escuela.";
     var pro2= new Movie("Caza Fantasmas","USA","1984-12-5");
     pro2.resource= re2;
     pro2.image="imagenes/caza-fantasmas.jpg";
+    pro2.synopsis="Durante sus años en la profesión, el detective Harrison (Michael Madsen) ha visto más horror que la mayoría de las personas podrían ver en dos vidas. Harrison está quemado y se prepara para pasar el testigo a un prometedor novato, que ya está listo para ocupar su puesto en el cuerpo de policía, cuando tiene lugar el asesinato de varios matones de los bajos fondos. Harrison se ve obligado a ocuparse del que sería su último caso junto a su joven protegido. Sin embargo, las investigaciones no consiguen ninguna pista clara sobre quién pudo cometer los crímenes. Es entonces cuando el asesino empieza a burlarse del detective proporcionando una serie de pistas confusas, además de unas fotografías espeluznantes que deja en la escena del crimen. A partir de entonces, un caso que no quedó resuelto en su día amenaza con sacar a la luz ahora los pecados del pasado. ";
     var pro3 = new Serie("Twin Peaks","USA", "1995-12-21");
     pro3.resource= re3;
     pro3.image="imagenes/twin_peaks.jpg";
+    pro3.synopsis="Serie de TV (1990-1991). 2 temporadas. 30 episodios. El excéntrico agente del FBI Dale Cooper (Kyle MacLachlan) llega a Twin Peaks, una pequeña población montañosa, para investigar el brutal asesinato de la joven y bella Laura Palmer, la chica más popular del instituto de la localidad. Con la ayuda del sheriff del pueblo, el amable Harry S. Truman (Michael Ontkean), el agente Cooper comienza a interrogar a los habitantes del pueblo y va descubriendo poco a poco que muchos de ellos esconden oscuros y misteriosos secretos.";
     var pro4 = new Movie("1408","USA", "2007-06-22");
     pro4.image="imagenes/1408.jpg";
+    pro4.resource= re4;
+    pro4.synopsis="Basada en un relato de Stephen King, cuenta la historia de un escritor de novelas de terror (John Cusack) bastante escéptico. De hecho, se dedica a desacreditar fenómenos paranormales ocurridos en supuestas casas encantadas. Aunque no cree en la existencia de vida más allá de la muerte, sus ideas al respecto cambiarán cuando entre en la habitación 1408 del Hotel Dolphin.";
     var pro5 = new Movie("Que se mueran los feos","España", "2010-06-24");
     pro5.image="imagenes/feos.jpg";
+    pro5.resource= re5;
+    pro5.synopsis="Eliseo es feo, cojo, está soltero y nunca ha conocido el amor. Nati es fea, le falta un pecho y está separada, pero tampoco conoce el verdadero amor. Él piensa que lo peor de su vida está aún por llegar. Ella piensa exactamente todo lo contrario. Al morir la madre de Eliseo, los dos vuelven a encontrarse después de veinte años. Quizá sea la última oportunidad que se les presenta de enamorarse y ser felices.";
     var pro6 = new Movie("La tumba de las luciernagas","Japón", "1967-01-10");
     pro6.image="imagenes/tumba.jpg";
+    pro6.resource= re6;
+    pro6.synopsis="Segunda Guerra Mundial (1939-1945). Seita y Setsuko son hijos de un oficial de la marina japonesa que viven en Kobe. Un día, durante un bombardeo, no consiguen llegar a tiempo al búnker donde su madre los espera. Cuando después buscan a su madre, la encuentran malherida en la escuela, que ha sido convertida en un hospital de urgencia.";
     vs.addProduction(pro1);
     vs.addProduction(pro2);
     vs.addProduction(pro3);
@@ -53,10 +65,12 @@ function crearObjetos(){
     var ac2= new Person("Samuel","L.Jackson","","1948-12-21","imagenes/samu.jpg");
     var ac3= new Person("Javier","Cámara","Rodríguez","1967-1-19","imagenes/javier-camara.jpg");
     var ac4= new Person("María del Carmen","García","y Maura","1945-09-15","imagenes/Carmen-Maura.jpg");
+    var ac5= new Person("Kyle","MacLachlan","","1959-02-22","imagenes/kyle.jpg");
     vs.addActor(ac1);
     vs.addActor(ac2);
     vs.addActor(ac3);
     vs.addActor(ac4);
+    vs.addActor(ac5);
     //objetos category
     var cat5= new Category("Lo más visto","Las peliculas y series más vistas...");
     var cat1= new Category("Comedia","Te partirás de risa.");
@@ -86,6 +100,7 @@ function crearObjetos(){
     vs.assignActor(ac1, pro4, "" , true);
     vs.assignActor(ac2, pro4, "" , false);
     vs.assignActor(ac3, pro5, "" , false);
+    vs.assignActor(ac5, pro3, "" , true);
    
     //Asignar producciones a directores
     vs.assignDirector(dir1,[pro6,pro1]);
@@ -94,93 +109,15 @@ function crearObjetos(){
     vs.assignDirector(dir4,pro1);
 }
 
-function categoriesMenuPopulate(){
-    //Recorremos las categorias.
-    var ini = document.getElementsByClassName("navbar-header");
-    var ul = document.getElementsByClassName("submenu");
-    var categorias = vs.categorias;
-    var categoria = categorias.next();
 
-    while (categoria.done !== true){
-        //Voy creando el submenu
-        //Tipo lista para cada categoría
-        var li = document.createElement("li");
-        var a = document.createElement("a");
-        a.setAttribute("href", "#");
-        li.appendChild(a);
-        ul[0].appendChild(li);
-
-        a.appendChild(document.createTextNode(categoria.value.name));
-        a.addEventListener("click", showCategory(categoria.value));
-
-        categoria = categorias.next();
-    }
-
-}
-function showCategory(categoria) {
-    return function () {
-        //borro lo que haya en el main
-        var main = document.getElementById("div-main");
-        removeChildren(main);
-
-        //El nombre y esas cosis de las categorías
-        var h2 = document.createElement("h2");
-        h2.appendChild(document.createTextNode(categoria.name));
-        main.appendChild(h2);
-
-        var p = document.createElement("p");
-        p.appendChild(document.createTextNode(categoria.description));
-        main.appendChild(p);
-
-        var productions = vs.getProductionsCategory(categoria);
-        var production = productions.next();
-
-        while (production.done !== true) {
-            //Creo un div para meterlo en columnas más pequeñas y se quede a un lado
-            var fotoPro = document.createElement("div");
-            fotoPro.setAttribute("class", "col-sm-4");
-            main.appendChild(fotoPro);
-
-            //Creo el div donde va la miniatura de la foto
-            var galeria1 = document.createElement("div");
-            galeria1.setAttribute("class", "thumbnail");
-            fotoPro.appendChild(galeria1);
-
-            //Cojo la foto de la Producción
-            var a1 = document.createElement("a");
-            galeria1.appendChild(a1);
-
-            var imgPro = document.createElement("img");
-            imgPro.setAttribute("src", production.value.image);
-            imgPro.addEventListener("click", showProduction(production.value));
-            a1.appendChild(imgPro);
-
-            //Meto la descripción de la foto
-            var desc = document.createElement("div");
-            desc.setAttribute("class", "caption");
-            galeria1.appendChild(desc);
-
-            //El nombre y el link para entrar a las producciones
-            var h4 = document.createElement("h4");
-            desc.appendChild(h4);
-
-            var a = document.createElement("a");
-            a.appendChild(document.createTextNode(production.value.title));
-            a.addEventListener("click", showProduction(production.value));
-            h4.appendChild(a);
-
-            production = productions.next();
-        }
-    }
-}
-//showProductions no la he hecho porque lo tengo hecho en cada show diferente 
-//Es por culpa de actores, mejor te lo explico en persona y veo si tengo que cambiarlo
 
 function showHomePage(){
     //Borro lo que haya en el main
     var main = document.getElementById("div-main");
     removeChildren(main);
 
+    menuForm();
+    
     var tituloPag = document.createElement("h2");
     tituloPag.appendChild(document.createTextNode("Página de Inicio"));
     tituloPag.setAttribute("id","Ini");
@@ -196,7 +133,7 @@ function showHomePage(){
     while (categoria.done !== true){
         //Creo los contenedores de las categorías que serán tantos como categorías haya
         var colCat = document.createElement("div");
-        colCat.setAttribute("class", "col-sm-8");
+        colCat.setAttribute("class", "col-sm-12");
         divCon.appendChild(colCat);
 
         var cap = document.createElement("div");
@@ -219,7 +156,7 @@ function showHomePage(){
         
         //Creo un div para meterlo en columnas más pequeñas y se quede a un lado
         var fotoDiv = document.createElement("div");
-        fotoDiv.setAttribute("class", "col-sm-6 divFotoCar");
+        fotoDiv.setAttribute("class", "col-sm-4 divFotoCar");
         cap.appendChild(fotoDiv);
 
         //Creo el carrusel
@@ -312,7 +249,90 @@ function showHomePage(){
         categoria = categorias.next();
     }//Fin del while de categorías
 }
+function categoriesMenuPopulate(){
+    //Recorremos las categorias.
+    var ini = document.getElementsByClassName("navbar-brand");
+    var ul = document.getElementsByClassName("submenu");
 
+    //removeChildren(ul);
+
+    ini[0].addEventListener("click", showHomePage());
+
+    var categorias = vs.categorias;
+    var categoria = categorias.next();
+
+    while (categoria.done !== true){
+        //Voy creando el submenu
+        //Tipo lista para cada categoría
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        a.setAttribute("href", "#");
+        li.appendChild(a);
+        ul[0].appendChild(li);
+
+        a.appendChild(document.createTextNode(categoria.value.name));
+        a.addEventListener("click", showCategory(categoria.value));
+
+        categoria = categorias.next();
+    }
+
+}
+function showCategory(categoria) {
+    return function () {
+        //borro lo que haya en el main
+        var main = document.getElementById("div-main");
+        removeChildren(main);
+
+        //El nombre y esas cosis de las categorías
+        var h2 = document.createElement("h2");
+        h2.appendChild(document.createTextNode(categoria.name));
+        main.appendChild(h2);
+
+        var p = document.createElement("p");
+        p.appendChild(document.createTextNode(categoria.description));
+        main.appendChild(p);
+
+        var productions = vs.getProductionsCategory(categoria);
+        var production = productions.next();
+
+        while (production.done !== true) {
+            //Creo un div para meterlo en columnas más pequeñas y se quede a un lado
+            var fotoPro = document.createElement("div");
+            fotoPro.setAttribute("class", "col-sm-4");
+            main.appendChild(fotoPro);
+
+            //Creo el div donde va la miniatura de la foto
+            var galeria1 = document.createElement("div");
+            galeria1.setAttribute("class", "thumbnail");
+            fotoPro.appendChild(galeria1);
+
+            //Cojo la foto de la Producción
+            var a1 = document.createElement("a");
+            galeria1.appendChild(a1);
+
+            var imgPro = document.createElement("img");
+            imgPro.setAttribute("src", production.value.image);
+            imgPro.addEventListener("click", showProduction(production.value));
+            a1.appendChild(imgPro);
+
+            //Meto la descripción de la foto
+            var desc = document.createElement("div");
+            desc.setAttribute("class", "caption title");
+            galeria1.appendChild(desc);
+
+            //El nombre y el link para entrar a las producciones
+            var h4 = document.createElement("h4");
+            desc.appendChild(h4);
+
+            var a = document.createElement("a");
+            a.appendChild(document.createTextNode(production.value.title));
+            a.addEventListener("click", showProduction(production.value));
+            h4.appendChild(a);
+
+            production = productions.next();
+        }
+    }
+}
 function showActors(){
     return function(){
         //borro lo que haya en el main
@@ -454,7 +474,7 @@ function showActor(actor) {
 
             //Meto la descripción de la foto
             var desc = document.createElement("div");
-            desc.setAttribute("class", "caption");
+            desc.setAttribute("class", "caption title");
             galeria1.appendChild(desc);
 
             //El nombre y el link para entrar a las producciones
@@ -613,7 +633,7 @@ function showDirector(director) {
 
             //Meto la descripción de la foto
             var desc = document.createElement("div");
-            desc.setAttribute("class", "caption");
+            desc.setAttribute("class", "caption title");
             galeria1.appendChild(desc);
 
             //El nombre y el link para entrar a las producciones
@@ -628,6 +648,63 @@ function showDirector(director) {
             production = productions.next();
         }
         
+    }
+}
+function showProductions(){
+    return function(){
+        //Borro el main
+        var main = document.getElementById("div-main");
+        removeChildren(main);
+
+        var tituloPag = document.createElement("h2");
+        tituloPag.appendChild(document.createTextNode("Producciones"));
+        tituloPag.setAttribute("id","Ini");
+        main.appendChild(tituloPag);
+
+        /*var r = document.createElement("div");
+        r.setAttribute("class"," caption row");
+        main.appendChild(r);*/
+
+        var productions = vs.productions;
+        var production = productions.next();
+
+        while (production.done !== true) {
+            
+            //Creo un div para meterlo en columnas más pequeñas y se quede a un lado
+            var fotoPro = document.createElement("div");
+            fotoPro.setAttribute("class", "col-md-4");
+            main.appendChild(fotoPro);
+
+            //Creo el div donde va la miniatura de la foto
+            var galeria1 = document.createElement("div");
+            galeria1.setAttribute("class", "thumbnail");
+            fotoPro.appendChild(galeria1);
+
+            //Cojo la foto de la Producción
+            var a1 = document.createElement("a");
+            galeria1.appendChild(a1);
+
+            var imgPro = document.createElement("img");
+            imgPro.setAttribute("src", production.value.image);
+            imgPro.addEventListener("click", showProduction(production.value));
+            a1.appendChild(imgPro);
+
+            //Meto la descripción de la foto
+            var desc = document.createElement("div");
+            desc.setAttribute("class", "caption title");
+            galeria1.appendChild(desc);
+
+            //El nombre y el link para entrar a las producciones
+            var h4 = document.createElement("h4");
+            desc.appendChild(h4);
+
+            var a = document.createElement("a");
+            a.appendChild(document.createTextNode(production.value.title));
+            a.addEventListener("click", showProduction(production.value));
+            h4.appendChild(a);
+
+            production = productions.next();
+        }
     }
 }
 function showProduction(production) {
@@ -649,6 +726,25 @@ function showProduction(production) {
         img.setAttribute("src", production.image);
         galeria.appendChild(img);
 
+        var btnG = document.createElement("div");
+        btnG.setAttribute("class", "btn-group-vertical");
+        foto.appendChild(btnG);
+
+        var btn = document.createElement("button");
+        btn.setAttribute("type", "button");
+        btn.setAttribute("class", "btn btn-default btnInfo")
+        btn.appendChild(document.createTextNode("Más información"));
+        //btn.setAttribute("value", production.title);
+        btn.addEventListener("click", Ventana(production));
+        btnG.appendChild(btn);
+
+        var btn1 = document.createElement("button");
+        btn1.setAttribute("type", "button");
+        btn1.setAttribute("class", "btn btn-default btnInfo")
+        btn1.appendChild(document.createTextNode("Cerrar ventanas abiertas"));
+        btn1.addEventListener("click", cerrarVentanas());
+        btnG.appendChild(btn1);
+        
         //Empiezo a meter la info
         var info = document.createElement("div");
         info.setAttribute("class", "col-sm-8");
@@ -658,9 +754,18 @@ function showProduction(production) {
         title.appendChild(document.createTextNode(production.title));
         info.appendChild(title);
 
+        var syno = document.createElement("p");
+        info.appendChild(syno);
+        //para que esté en negrita
+        var b1 = document.createElement("b");
+        b1.appendChild(document.createTextNode("Sinopsis: "));
+        syno.appendChild(b1);
+        syno.appendChild(document.createTextNode(production.synopsis));
+
         var iterador = vs.getCast(production);
         var len1 = iterador.actores.length;
         var div_actores = document.createElement("div");
+        div_actores.setAttribute("class", "row");
         //Por si no tiene director que no salga
         if(len1 > 0 ){
             var actores = document.createElement("h3");
@@ -686,7 +791,7 @@ function showProduction(production) {
             a1.appendChild(foto);
 
             var cap = document.createElement("div");
-            cap.setAttribute("class", "caption");
+            cap.setAttribute("class", "caption title");
             //Nombre de los actores
             var h4 = document.createElement("h4");
             cap.appendChild(h4);
@@ -702,6 +807,7 @@ function showProduction(production) {
         }//Fin actores
         //Array de directores dentro del iterador
         var div_directores = document.createElement("div");
+        div_directores.setAttribute("class", "row");
         info.appendChild(div_directores);
         //Por si no hay directores, que no salga lo de directores: 
         var len2 = iterador.directores.length;
@@ -729,7 +835,7 @@ function showProduction(production) {
             a2.appendChild(foto2);
 
             var cap2 = document.createElement("div");
-            cap2.setAttribute("class", "caption");
+            cap2.setAttribute("class", "caption title");
             galeria2.appendChild(cap2);
             //Muestro el nombre
             var h42 = document.createElement("h4");
@@ -741,8 +847,11 @@ function showProduction(production) {
             cap2.appendChild(a2);
             
         }
+        
     }
+    
 }
+
 function showResource(production) {
     return function () {
         //El main
@@ -833,6 +942,8 @@ function initPopulate() {
     actores.addEventListener("click", showActors());
     var directores = document.getElementById("directores");
     directores.addEventListener("click", showDirectors());
+    var producciones = document.getElementById("producciones");
+    producciones.addEventListener("click", showProductions());
     var login = document.getElementById("login");
     login.addEventListener("click", Login());
     //Método para crear los objetos
