@@ -61,8 +61,8 @@ function openSesion() {
         var p = document.createElement("p");
         main.appendChild(p);
 
-        if (user === "admin" && pass === "admin") {
-            document.cookie = "username=admin";
+        if (user === "prueba" && pass === "prueba") {
+            document.cookie = "username=prueba";
             p.setAttribute("style", "color:green");
             p.appendChild(document.createTextNode("Inicio de sesión correcto"));
             window.location.href = 'http://localhost/Formularios-master/VideoStreaming.html';
@@ -72,7 +72,7 @@ function openSesion() {
         }
     }
 }
-/*function closeSesion() {
+function closeSesion() {
     return function () {
         document.cookie = "username=; max-age=0";
 
@@ -82,9 +82,9 @@ function openSesion() {
 
         p.setAttribute("style", "color:green");
         p.innerHTML = "Cerrado Correctamente";
-        window.location.href = 'http://localhost/FORMULARIOS';
+        window.location.href = 'http://localhost/Formularios-master/VideoStreaming.html';
     }
-}*/
+}
 function getCookie(cname) {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -104,9 +104,19 @@ function menuForm(){
     //Div para poder ir borrando el main pero no el menú
     var main = document.getElementById("nav-forms");
     removeChildren(main);
+    var nav = document.getElementsByClassName("navbar-right");
     var username = getCookie("username");
     //Para que solo pueda meterse el administrador 
-    if (username === "admin") {
+    if (username === "prueba") {
+        //Meto el cerrar sesión en el menú
+        removeChildren(nav[0]);
+        var liCerrar = document.createElement("li");
+        nav[0].appendChild(liCerrar);
+        var aCerrar = document.createElement("a");
+        aCerrar.appendChild(document.createTextNode("Cerrrar Sesión"));
+        aCerrar.addEventListener("click", closeSesion());
+        liCerrar.appendChild(aCerrar);
+
         var panel = document.createElement("div");
         panel.setAttribute("class", "panel-group");
         main.appendChild(panel);
@@ -179,6 +189,7 @@ function menuForm(){
 
         var aMoDir = document.createElement("a");
         aMoDir.appendChild(document.createTextNode("Modificar Director"));
+        aMoDir.addEventListener("click", ModDirector());
         paMoDir.appendChild(aMoDir);
         
         var paCreDir = document.createElement("div");
@@ -218,6 +229,7 @@ function menuForm(){
 
         var aModiAc = document.createElement("a");
         aModiAc.appendChild(document.createTextNode("Modificar Actor"));
+        aModiAc.addEventListener("click", ModActor());
         paModiAc.appendChild(aModiAc);
         
         var paCreateAc = document.createElement("div");
@@ -250,14 +262,6 @@ function menuForm(){
         aDeltPro.appendChild(document.createTextNode("Eliminar Producción"));
         aDeltPro.addEventListener("click", DeltPro());
         p3.appendChild(aDeltPro);
-
-        var paMoPro= document.createElement("div");
-        paMoPro.setAttribute("class", "panel-body");
-        pa4.appendChild(paMoPro);
-
-        var aMoPro = document.createElement("a");
-        aMoPro.appendChild(document.createTextNode("Modificar Producción"));
-        paMoPro.appendChild(aMoPro);
         
         var paCrePro = document.createElement("div");
         paCrePro.setAttribute("class", "panel-body");
@@ -273,10 +277,13 @@ function menuForm(){
 function DeltCat(){
     function deltCategory() {
         return function () {
-            var form = document.forms["delt-cat"]["cat-delt"];
-            var valueCat = form.value;
+            var select = document.forms["delt-cat"]["cat-delt"];
+            var valueCat = select.value;
+            var p = document.getElementById("result");
 
             if (valueCat == "") {
+                p.appendChild(document.createTextNode("Error al eliminar la categoría"));
+                p.setAttribute("style", "color:red");
                 throw new EmptyValueException();
             } else {
                 var categorias = vs.categorias;
@@ -289,7 +296,10 @@ function DeltCat(){
                     categoria = categorias.next();
                 }
             }
-            form.options[form.options.selectedIndex].remove();
+            select.options[select.options.selectedIndex].remove();
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
+            categoriesMenuPopulate();
         }
     }
 
@@ -352,6 +362,10 @@ function DeltCat(){
         btn.appendChild(document.createTextNode("Eliminar"));
         btn.addEventListener("click", deltCategory())
         div1.appendChild(btn);
+
+        var p = document.createElement("p");
+        p.setAttribute("id", "result");
+        form.appendChild(p);
     }
     
 }
@@ -361,8 +375,11 @@ function DeltDir(){
         return function () {
             var form = document.forms["delt-dir"]["dir-delt"];
             var valueDir = form.value;
+            var p = document.getElementById("result");
 
             if (valueDir == "") {
+                p.appendChild(document.createTextNode("Error al eliminar el director"));
+                p.setAttribute("style", "color:red");
                 throw new EmptyValueException();
             } else {
 
@@ -377,6 +394,8 @@ function DeltDir(){
                 }
             }
             form.options[form.options.selectedIndex].remove();
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
         }
     }
     //Para escribir
@@ -439,6 +458,10 @@ function DeltDir(){
         btn.appendChild(document.createTextNode("Eliminar"));
         btn.addEventListener("click", deltDirector())
         div1.appendChild(btn);
+
+        var p = document.createElement("p");
+        p.setAttribute("id", "result");
+        form.appendChild(p);
     }
     
 }
@@ -449,8 +472,11 @@ function DeltAc(){
         return function () {
             var form = document.forms["delt-ac"]["ac-delt"];
             var valueAc = form.value;
+            var p = document.getElementById("result");
 
             if (valueAc == "") {
+                p.appendChild(document.createTextNode("Error al eliminar el actor"));
+                p.setAttribute("style", "color:red");
                 throw new EmptyValueException();
             } else {
 
@@ -465,6 +491,8 @@ function DeltAc(){
                 }
             }
             form.options[form.options.selectedIndex].remove();
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
         }
     }
     //Para escribir
@@ -527,6 +555,10 @@ function DeltAc(){
         btn.appendChild(document.createTextNode("Eliminar"));
         btn.addEventListener("click", deltActor())
         div1.appendChild(btn);
+
+        var p = document.createElement("p");
+        p.setAttribute("id", "result");
+        form.appendChild(p);
     }
     
 }
@@ -534,10 +566,13 @@ function DeltPro(){
     //Método para eliminar el director
     function deltDirector() {
         return function () {
-            var form = document.forms["delt-pro"]["pro-delt"];
-            var valuePro = form.value;
+            var select = document.forms["delt-pro"]["pro-delt"];
+            var valuePro = select.value;
+            var p = document.getElementById("result");
 
             if (valuePro == "") {
+                p.appendChild(document.createTextNode("Error al eliminar la producción"));
+                p.setAttribute("style", "color:red");
                 throw new EmptyValueException();
             } else {
 
@@ -552,7 +587,9 @@ function DeltPro(){
                     production = productions.next();
                 }
             }
-            form.options[form.options.selectedIndex].remove();
+            select.options[select.options.selectedIndex].remove();
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
         }
     }
     //Para escribir
@@ -615,6 +652,10 @@ function DeltPro(){
         btn.appendChild(document.createTextNode("Eliminar"));
         btn.addEventListener("click", deltDirector())
         div1.appendChild(btn);
+
+        var p = document.createElement("p");
+        p.setAttribute("id", "result");
+        form.appendChild(p);
     }
     
 }
@@ -633,7 +674,7 @@ function CreateCategory() {
             } else {
                 var newCat = new Category(name);
                 if (description != "") {
-                    cat.description = description;
+                    newCat.description = description;
                 }
 
                 var x = vs.addCategory(newCat);
@@ -642,6 +683,7 @@ function CreateCategory() {
             document.forms["catForm"].reset();
             p.appendChild(document.createTextNode("Guardado"));
             p.setAttribute("style", "color:green");
+            categoriesMenuPopulate();
         }
     }
 
@@ -731,8 +773,11 @@ function CreateDirector() {
             var image = document.forms["dirForm"]["img"].value;
             var imagePart = image.split("\\");
             var imageLoc = imagePart[imagePart.length-1];
+            var p = document.getElementById("result")
 
             if (name == "" || lastname == "" || born == "") {
+                p.appendChild(document.createTextNode("Error al introducir el director"));
+                p.setAttribute("style", "color:red");
                 console.log("Error de vacio");
                 throw new EmptyValueException();
             } else {
@@ -760,11 +805,13 @@ function CreateDirector() {
                             production = productions.next();
                         }
 
-                    }
-                }
+                    }//fin del if
+                }//fin del bucle
 
             }
             document.forms["dirForm"].reset();
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
         }
     }
 
@@ -834,7 +881,7 @@ function CreateDirector() {
         var born = document.createElement("label");
         born.appendChild(document.createTextNode("Fecha de nacimiento*:"));
         born.setAttribute("class","control-label col-sm-2");
-        formGroup2.appendChild(born);
+        formGroup3.appendChild(born);
 
         var div3 = document.createElement("div");
         div3.setAttribute("class","col-sm-10");
@@ -845,7 +892,7 @@ function CreateDirector() {
         date.setAttribute("class", "form-control");
         date.setAttribute("name", "born");
         date.setAttribute("id", "born");
-        //date.setAttribute("placeholder", "Meter el primer apellido");
+        date.setAttribute("placeholder", "Meter AAAA/MM/DD");
         div3.appendChild(date);
 
         var formGroup4 = document.createElement("div");
@@ -945,20 +992,20 @@ function CreateActor() {
             var name = document.forms["actForm"]["name"].value;
             var lastname = document.forms["actForm"]["lastname1"].value;
             var born = document.forms["actForm"]["born"].value;
-            var image = document.forms["actForm"]["image"].value;
+            var image = document.forms["actForm"]["img"].value;
             var imagePart = image.split("\\");
-            var imageLoc = imagePart[imagePart.length-1];
+            var p = document.getElementById("result")
 
             if (name == "" || lastname == "" || born == "") {
+                p.appendChild(document.createTextNode("Error al introducir el actor"));
+                p.setAttribute("style", "color:red");
                 throw new EmptyValueException();
             } else {
-                var actor = new Person(name, lastname,"", born);
-                if (image != ""){
-                    actor.picture = "images/" + imageLoc;
-                }
+                var actor = new Person(name, lastname,"", born, imagePart);
+
                 vs.addActor(actor);
                 //Productions Seleccionadas
-                var producciones = document.getElemenstByClassName("producciones");
+                var producciones = document.getElementsByClassName("producciones");
                 var long = producciones.length;
 
                 for (var x = 0; x < long; x++) {
@@ -980,6 +1027,8 @@ function CreateActor() {
                 }
             }
             document.forms["actForm"].reset();
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
         }
     }
 
@@ -1049,18 +1098,18 @@ function CreateActor() {
         var born = document.createElement("label");
         born.appendChild(document.createTextNode("Fecha de nacimiento*:"));
         born.setAttribute("class","control-label col-sm-2");
-        formGroup2.appendChild(born);
+        formGroup3.appendChild(born);
 
         var div3 = document.createElement("div");
         div3.setAttribute("class","col-sm-10");
         formGroup3.appendChild(div3);
 
-        var date = document.createElement("date");
-        date.setAttribute("type", "date");
+        var date = document.createElement("input");
+        date.setAttribute("type", "text");
         date.setAttribute("class", "form-control");
         date.setAttribute("name", "born");
         date.setAttribute("id", "born");
-        //date.setAttribute("placeholder", "Meter el primer apellido");
+        date.setAttribute("placeholder", "Meter AAAA/MM/DD");
         div3.appendChild(date);
 
         var formGroup4 = document.createElement("div");
@@ -1165,7 +1214,11 @@ function CreateProduction() {
             var select = document.forms["proForm"]["cat"];
             var id = select.value;
 
+            var p = document.getElementById("result");
+
             if (title == "" || publication == "") {
+                p.appendChild(document.createTextNode("Error al introducir la producción"));
+                p.setAttribute("style", "color:red");
                 throw new EmptyValueException();
             } else {
                 var pro = new Movie(title, nationality, publication, synopsis, imagePart);
@@ -1239,6 +1292,8 @@ function CreateProduction() {
 
             }
             document.forms["proForm"].reset();
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
         }
     }
 
@@ -1506,12 +1561,15 @@ function ModCategory() {
 
     function modCategory() {
         return function () {
-            var form = document.forms["catForm"]["selectPrin"];
-            var id = form.options[form.options.selectedIndex].text;
+            var select = document.forms["catForm"]["cat-mo"];
+            var id = select.options[select.options.selectedIndex].text;
             var name = document.forms["catForm"]["name"].value;
             var description = document.forms["catForm"]["description"].value;
+            var p = document.getElementById("result");
 
             if (name == "" || id == "") {
+                p.appendChild(document.createTextNode("Error al modificar la categoría"));
+                p.setAttribute("style", "color:red");
                 throw new EmptyValueException();
             } else {
                 var categorias = vs.categorias;
@@ -1526,7 +1584,10 @@ function ModCategory() {
                 }
 
             }
-            form.options[form.options.selectedIndex].text = name;
+            select.options[select.options.selectedIndex].text = name;
+            categoriesMenuPopulate();
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
         }
     }
 
@@ -1562,7 +1623,8 @@ function ModCategory() {
 
         var select = document.createElement("select");
         select.setAttribute("class", "form-control");
-        select.setAttribute("name", "cat-delt");
+        select.setAttribute("name", "cat-mo");
+        select.setAttribute("id","sel");
         div.appendChild(select);
 
         var categorias = vs.categorias;
@@ -1634,24 +1696,319 @@ function ModCategory() {
         p.setAttribute("id", "result");
         form.appendChild(p);
 
-        //actCat();
     }
-    function actCat() {
-        var form = document.getElementById("sel");
-    
-        var id = form.options[form.options.selectedIndex].text;
-    
-        var categories = vs.categories;
-        var category = categories.next();
-        var found = false;
-    
-        while (found !== true) {
-            if (category.value.name === id) {
-                document.forms["catForm"]["name"].value = category.value.name;
-                document.forms["catForm"]["description"].value = category.value.description;
-                found = true;
+}
+function ModDirector(){
+    function modDirector() {
+        return function () {
+            var select = document.forms["dirForm"]["dir-select"];
+            var id = select.options[select.options.selectedIndex].text;
+            var name = document.forms["dirForm"]["name"].value;
+            var lastname1 = document.forms["dirForm"]["lastname1"].value;
+            var born = new Date(document.forms["dirForm"]["born"].value);
+            var p = document.getElementById("result");
+
+            if (name == "" || lastname1 == "" || born == "" || id == "") {
+                p.appendChild(document.createTextNode("Error al modificar el director"));
+                p.setAttribute("style", "color:red");
+                throw new EmptyValueException();
+            } else {
+                var directores = vs.directores;
+                var director = directores.next();
+
+                while (director.done !== true) {
+                    if (director.value.name + " " + director.value.lastname1 === id) {
+                        director.value.name= name;
+                        director.value.lastname1=lastname1;
+                        director.value.born = born;
+                    }
+                    director = directores.next();
+                }
+
             }
-            category = categories.next();
+            select.options[select.options.selectedIndex].text = name + " " + lastname1;
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
         }
+    }
+    return function(){
+        var main = document.getElementById("div-main");
+        removeChildren(main);
+
+        var h2 = document.createElement("h2");
+        h2.appendChild(document.createTextNode("Modificar Director"));
+        main.appendChild(h2);
+
+        var form = document.createElement("form");
+        form.setAttribute("name", "dirForm");
+        form.setAttribute("id", "dirForm");
+        form.setAttribute("class", "form-horizontal");
+        main.appendChild(form);
+
+        var formGroup1 = document.createElement("div");
+        formGroup1.setAttribute("class","form-group group-login");
+        form.appendChild(formGroup1);
+
+        var label = document.createElement("label");
+        label.setAttribute("class", "control-label col-sm-2");
+        label.appendChild(document.createTextNode("Director a modificar:"));
+        formGroup1.appendChild(label);
+
+        var div = document.createElement("div");
+        div.setAttribute("class", "col-sm-5");
+        formGroup1.appendChild(div);
+
+        var select = document.createElement("select");
+        select.setAttribute("class", "form-control");
+        select.setAttribute("name", "dir-select");
+        div.appendChild(select);
+
+        var directores = vs.directores;
+        var director = directores.next();
+
+        while (director.done !== true){
+            var option = document.createElement("option");
+            option.appendChild(document.createTextNode(director.value.name + " " + director.value.lastname1));
+            option.setAttribute("value", director.value.name + " " + director.value.lastname1);
+            select.appendChild(option);
+
+            director = directores.next();
+        }
+
+        var formGroup2 = document.createElement("div");
+        formGroup2.setAttribute("class","form-group");
+        form.appendChild(formGroup2);
+
+        var name = document.createElement("label");
+        name.appendChild(document.createTextNode("Nombre*:"));
+        name.setAttribute("class","control-label col-sm-2");
+        formGroup2.appendChild(name);
+
+        var div2 = document.createElement("div");
+        div2.setAttribute("class","col-sm-10");
+        formGroup2.appendChild(div2);
+
+        var input1 = document.createElement("input");
+        input1.setAttribute("type", "text");
+        input1.setAttribute("class", "form-control");
+        input1.setAttribute("name", "name");
+        input1.setAttribute("id", "name");
+        input1.setAttribute("placeholder", "Meter el nombre");
+        div2.appendChild(input1);
+
+        var formGroup3 = document.createElement("div");
+        formGroup3.setAttribute("class","form-group");
+        form.appendChild(formGroup3);
+
+        var lastname1 = document.createElement("label");
+        lastname1.appendChild(document.createTextNode("Primer apellido*:"));
+        lastname1.setAttribute("class","control-label col-sm-2");
+        formGroup3.appendChild(lastname1);
+
+        var div3 = document.createElement("div");
+        div3.setAttribute("class","col-sm-10");
+        formGroup3.appendChild(div3);
+
+        var input2 = document.createElement("input");
+        input2.setAttribute("type", "text");
+        input2.setAttribute("class", "form-control");
+        input2.setAttribute("name", "lastname1");
+        input2.setAttribute("id", "lastname1");
+        input2.setAttribute("placeholder", "Meter el primer apellido");
+        div3.appendChild(input2);
+
+        var formGroup4 = document.createElement("div");
+        formGroup4.setAttribute("class","form-group");
+        form.appendChild(formGroup4);
+
+        var born = document.createElement("label");
+        born.appendChild(document.createTextNode("Fecha de nacimiento*:"));
+        born.setAttribute("class","control-label col-sm-2");
+        formGroup4.appendChild(born);
+
+        var div4 = document.createElement("div");
+        div4.setAttribute("class","col-sm-10");
+        formGroup4.appendChild(div4);
+
+        var date = document.createElement("input");
+        date.setAttribute("type", "text");
+        date.setAttribute("class", "form-control");
+        date.setAttribute("name", "born");
+        date.setAttribute("id", "born");
+        date.setAttribute("placeholder", "Meter AAAA/MM/DD");
+        div4.appendChild(date);
+
+        var div5 = document.createElement("div");
+        div5.setAttribute("class","col-sm-10");
+        form.appendChild(div5);
+
+        var btn = document.createElement("button");
+        btn.setAttribute("type", "button");
+        btn.setAttribute("id", "btn-login");
+        btn.setAttribute("class", "btn btn-default btnInfo")
+        btn.appendChild(document.createTextNode("Guardar"));
+        btn.addEventListener("click", modDirector())
+        div5.appendChild(btn);
+
+        var p = document.createElement("p");
+        p.setAttribute("id", "result");
+        form.appendChild(p);
+    }
+}
+function ModActor(){
+    function modActor() {
+        return function () {
+            var select = document.forms["dirForm"]["act-select"];
+            var id = select.options[select.options.selectedIndex].text;
+            var name = document.forms["dirForm"]["name"].value;
+            var lastname1 = document.forms["dirForm"]["lastname1"].value;
+            var born = new Date(document.forms["dirForm"]["born"].value);
+            var p = document.getElementById("result");
+
+            if (name == "" || lastname1 == "" || born == "" || id == "") {
+                p.appendChild(document.createTextNode("Error al modificar el actor"));
+                p.setAttribute("style", "color:red");
+                throw new EmptyValueException();
+            } else {
+                var actors = vs.actors;
+                var actor = actors.next();
+
+                while (actor.done !== true) {
+                    if (actor.value.name + " " + actor.value.lastname1 === id) {
+                        actor.value.name= name;
+                        actor.value.lastname1=lastname1;
+                        actor.value.born = born;
+                    }
+                    actor = actors.next();
+                }
+
+            }
+            select.options[select.options.selectedIndex].text = name + " " + lastname1;
+            p.appendChild(document.createTextNode("Guardado"));
+            p.setAttribute("style", "color:green");
+        }
+    }
+    return function(){
+        var main = document.getElementById("div-main");
+        removeChildren(main);
+
+        var h2 = document.createElement("h2");
+        h2.appendChild(document.createTextNode("Modificar Actor"));
+        main.appendChild(h2);
+
+        var form = document.createElement("form");
+        form.setAttribute("name", "dirForm");
+        form.setAttribute("id", "dirForm");
+        form.setAttribute("class", "form-horizontal");
+        main.appendChild(form);
+
+        var formGroup1 = document.createElement("div");
+        formGroup1.setAttribute("class","form-group group-login");
+        form.appendChild(formGroup1);
+
+        var label = document.createElement("label");
+        label.setAttribute("class", "control-label col-sm-2");
+        label.appendChild(document.createTextNode("Actor a modificar:"));
+        formGroup1.appendChild(label);
+
+        var div = document.createElement("div");
+        div.setAttribute("class", "col-sm-5");
+        formGroup1.appendChild(div);
+
+        var select = document.createElement("select");
+        select.setAttribute("class", "form-control");
+        select.setAttribute("name", "act-select");
+        div.appendChild(select);
+
+        var actors = vs.actors;
+        var actor = actors.next();
+
+        while (actor.done !== true){
+            var option = document.createElement("option");
+            option.appendChild(document.createTextNode(actor.value.name + " " + actor.value.lastname1));
+            option.setAttribute("value", actor.value.name + " " + actor.value.lastname1);
+            select.appendChild(option);
+
+            actor = actors.next();
+        }
+
+        var formGroup2 = document.createElement("div");
+        formGroup2.setAttribute("class","form-group");
+        form.appendChild(formGroup2);
+
+        var name = document.createElement("label");
+        name.appendChild(document.createTextNode("Nombre*:"));
+        name.setAttribute("class","control-label col-sm-2");
+        formGroup2.appendChild(name);
+
+        var div2 = document.createElement("div");
+        div2.setAttribute("class","col-sm-10");
+        formGroup2.appendChild(div2);
+
+        var input1 = document.createElement("input");
+        input1.setAttribute("type", "text");
+        input1.setAttribute("class", "form-control");
+        input1.setAttribute("name", "name");
+        input1.setAttribute("id", "name");
+        input1.setAttribute("placeholder", "Meter el nombre");
+        div2.appendChild(input1);
+
+        var formGroup3 = document.createElement("div");
+        formGroup3.setAttribute("class","form-group");
+        form.appendChild(formGroup3);
+
+        var lastname1 = document.createElement("label");
+        lastname1.appendChild(document.createTextNode("Primer apellido*:"));
+        lastname1.setAttribute("class","control-label col-sm-2");
+        formGroup3.appendChild(lastname1);
+
+        var div3 = document.createElement("div");
+        div3.setAttribute("class","col-sm-10");
+        formGroup3.appendChild(div3);
+
+        var input2 = document.createElement("input");
+        input2.setAttribute("type", "text");
+        input2.setAttribute("class", "form-control");
+        input2.setAttribute("name", "lastname1");
+        input2.setAttribute("id", "lastname1");
+        input2.setAttribute("placeholder", "Meter el primer apellido");
+        div3.appendChild(input2);
+
+        var formGroup4 = document.createElement("div");
+        formGroup4.setAttribute("class","form-group");
+        form.appendChild(formGroup4);
+
+        var born = document.createElement("label");
+        born.appendChild(document.createTextNode("Fecha de nacimiento*:"));
+        born.setAttribute("class","control-label col-sm-2");
+        formGroup4.appendChild(born);
+
+        var div4 = document.createElement("div");
+        div4.setAttribute("class","col-sm-10");
+        formGroup4.appendChild(div4);
+
+        var date = document.createElement("input");
+        date.setAttribute("type", "text");
+        date.setAttribute("class", "form-control");
+        date.setAttribute("name", "born");
+        date.setAttribute("id", "born");
+        date.setAttribute("placeholder", "Meter AAAA/MM/DD");
+        div4.appendChild(date);
+
+        var div5 = document.createElement("div");
+        div5.setAttribute("class","col-sm-10");
+        form.appendChild(div5);
+
+        var btn = document.createElement("button");
+        btn.setAttribute("type", "button");
+        btn.setAttribute("id", "btn-login");
+        btn.setAttribute("class", "btn btn-default btnInfo")
+        btn.appendChild(document.createTextNode("Guardar"));
+        btn.addEventListener("click", modActor())
+        div5.appendChild(btn);
+
+        var p = document.createElement("p");
+        p.setAttribute("id", "result");
+        form.appendChild(p);
     }
 }

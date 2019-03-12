@@ -278,7 +278,31 @@ var VideoSystem = (function () { //La función anónima devuelve un método getI
 				}
 				//Si todo va bien añado la producción.
 				var post = getProductionPosition(production);//Busco el indice del elemento que me han pasado.
-				_productions.splice(post,1);
+				
+				var cast = this.getCast(production);
+                var dp = getDirectorPosition(cast.director.director);
+				var acPost = getActorPosition(cast.actors[i].actor);
+				var actPro = getProPosition(production, _actors[acPost].productions);
+
+                for (var i = 0; i < cast.actors.length; i++) {
+                    if (actPro !== -1) {
+                        _actors[acPost].productions.splice(actPro, 1);
+                    }
+                }
+
+                var dirPro = getProPosition(production, _directors[dp].productions);
+                if (dirPro !== -1) {
+                    _directors[dp].productions.splice(dirPro, 1);
+                }
+
+                for (var i = 0; i< _categories.length; i++){
+                    var pos = getProPosition(production, _categories[i].productions);
+                    if ( pos !== -1){
+                        _categories[i].productions.splice(pos, 1);
+                    }
+                }
+
+                _productions.splice(post,1);
 				//Devuelvo el número de elementos del array de producciones.
 				return _productions.length;
 			}
