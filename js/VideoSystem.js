@@ -386,9 +386,10 @@ var VideoSystem = (function () { //La función anónima devuelve un método getI
 				}		
 				//categoria no puede estar vacio.
 				if (!categoria || categoria === '') throw new EmptyValueException("categoria");
-
+				console.log("position=" + getCategoryPosition(categoria));
 				//Busco si existe el categoria.
 				if(getCategoryPosition(categoria) !== -1){
+					console.log("error");
 					throw new RepeatException("categoria");
 				}
 				//Si todo va bien añado el categoria.

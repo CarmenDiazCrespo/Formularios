@@ -139,6 +139,7 @@ function menuForm(){
 
         var aModiCat = document.createElement("a");
         aModiCat.appendChild(document.createTextNode("Modificar Categoría"));
+        aModiCat.addEventListener("click", ModCategory());
         paModiCat.appendChild(aModiCat);
         
         var paCreateCat = document.createElement("div");
@@ -264,6 +265,7 @@ function menuForm(){
 
         var aCrePro = document.createElement("a");
         aCrePro.appendChild(document.createTextNode("Crear Producción"));
+        aCrePro.addEventListener("click",CreateProduction());
         paCrePro.appendChild(aCrePro);
     }
 }
@@ -634,7 +636,8 @@ function CreateCategory() {
                     cat.description = description;
                 }
 
-                vs.addCategory(newCat);
+                var x = vs.addCategory(newCat);
+                console.log(x);
             }
             document.forms["catForm"].reset();
             p.appendChild(document.createTextNode("Guardado"));
@@ -725,22 +728,21 @@ function CreateDirector() {
             var name = document.forms["dirForm"]["name"].value;
             var lastname = document.forms["dirForm"]["lastname1"].value;
             var born = document.forms["dirForm"]["born"].value;
-            var image = document.forms["dirForm"]["image"].value;
+            var image = document.forms["dirForm"]["img"].value;
             var imagePart = image.split("\\");
             var imageLoc = imagePart[imagePart.length-1];
 
             if (name == "" || lastname == "" || born == "") {
+                console.log("Error de vacio");
                 throw new EmptyValueException();
             } else {
-                var dir = new Person(name, lastname, born);
-                if (image != ""){
-                    dir.picture = "images/" + imageLoc;
-                }else {
-                    dir.picture = "images/default.jpg";
+                var dir = new Person(name, lastname, "", born);
+                if (image !== ""){
+                    dir.picture = "imagenes/" + imageLoc;
                 }
                 vs.addDirector(dir);
                 //Productions Seleccionadas
-                var producciones = document.getElementById("tbody").getElementsByTagName('input');
+                var producciones = document.getElementsByClassName("producciones");
                 var long = producciones.length;
 
                 for (var x = 0; x < long; x++) {
@@ -760,10 +762,9 @@ function CreateDirector() {
 
                     }
                 }
-                resultForm(true);
+
             }
             document.forms["dirForm"].reset();
-            //event.preventDefault();
         }
     }
 
@@ -839,7 +840,7 @@ function CreateDirector() {
         div3.setAttribute("class","col-sm-10");
         formGroup3.appendChild(div3);
 
-        var date = document.createElement("date");
+        var date = document.createElement("input");
         date.setAttribute("type", "text");
         date.setAttribute("class", "form-control");
         date.setAttribute("name", "born");
@@ -886,7 +887,7 @@ function CreateDirector() {
         dv1.appendChild(table);
 
         var tbody = document.createElement("tbody");
-        tbody.setAttribute("class", "tbody");
+        tbody.setAttribute("id", "tbody");
         table.appendChild(tbody);
 
         var productions = vs.productions;
@@ -898,12 +899,12 @@ function CreateDirector() {
             tbody.appendChild(tr);
 
             var td1 = document.createElement("td");
-            td1.setAttribute("id", "producciones");
             tr.appendChild(td1);
 
             var check = document.createElement("input");
             check.setAttribute("type", "checkbox");
             check.setAttribute("name", "produccion");
+            check.setAttribute("class", "producciones");
             check.setAttribute("value", production.value.title);
             td1.appendChild(check);
 
@@ -930,9 +931,6 @@ function CreateDirector() {
         p.setAttribute("id", "result");
         form.appendChild(p);
 
-        
-        //createInput("Imagen", "image", form, "Imagen del director", "", "I");
-        //createTable("Producciones", "productions", form);
 
         var p = document.createElement("p");
         p.setAttribute("id", "result");
@@ -954,15 +952,13 @@ function CreateActor() {
             if (name == "" || lastname == "" || born == "") {
                 throw new EmptyValueException();
             } else {
-                var actor = new Person(name, lastname, born);
+                var actor = new Person(name, lastname,"", born);
                 if (image != ""){
                     actor.picture = "images/" + imageLoc;
-                }else {
-                    actor.picture = "images/default.jpg";
                 }
                 vs.addActor(actor);
                 //Productions Seleccionadas
-                var producciones = document.getElementById("tbody").getElementsByTagName('input');
+                var producciones = document.getElemenstByClassName("producciones");
                 var long = producciones.length;
 
                 for (var x = 0; x < long; x++) {
@@ -982,10 +978,8 @@ function CreateActor() {
 
                     }
                 }
-                resultForm(true);
             }
             document.forms["actForm"].reset();
-            //event.preventDefault();
         }
     }
 
@@ -1062,7 +1056,7 @@ function CreateActor() {
         formGroup3.appendChild(div3);
 
         var date = document.createElement("date");
-        date.setAttribute("type", "text");
+        date.setAttribute("type", "date");
         date.setAttribute("class", "form-control");
         date.setAttribute("name", "born");
         date.setAttribute("id", "born");
@@ -1115,17 +1109,17 @@ function CreateActor() {
         var production = productions.next();
 
         while (production.done !== true) {
-            console.log(production.value.title);
+            //console.log(production.value.title);
             var tr = document.createElement("tr");
             tbody.appendChild(tr);
 
             var td1 = document.createElement("td");
-            td1.setAttribute("id", "producciones");
             tr.appendChild(td1);
 
             var check = document.createElement("input");
             check.setAttribute("type", "checkbox");
             check.setAttribute("name", "produccion");
+            check.setAttribute("class", "producciones");
             check.setAttribute("value", production.value.title);
             td1.appendChild(check);
 
@@ -1165,80 +1159,76 @@ function CreateProduction() {
             var publication = document.forms["proForm"]["publication"].value;
             var nationality = document.forms["proForm"]["nationality"].value;
             var synopsis = document.forms["proForm"]["synopsis"].value;
-            var image = document.forms["proForm"]["image"].value;
+            var image = document.forms["proForm"]["img"].value;
             var imagePart = image.split("\\");
-            var imageLoc = imagePart[imagePart.length-1];
 
-            var select = document.forms["proForm"]["selectPrin"];
+            var select = document.forms["proForm"]["cat"];
             var id = select.value;
-            $('form').validator();
 
             if (title == "" || publication == "") {
-                resultForm(false);
                 throw new EmptyValueException();
             } else {
-                var pro = new Movie(title, publication);
-                if (nationality != "") {
-                    pro.nationality = nationality;
-                }
-                if (synopsis != "") {
-                    pro.synopsis = synopsis;
-                }
+                var pro = new Movie(title, nationality, publication, synopsis, imagePart);
+        
+                vs.addProduction(pro);
 
-                if (image != ""){
-                    pro.image = "images/" + imageLoc;
-                }else {
-                    pro.image = "images/pDefault.jpg";
-                }
-                videosystem.addProduction(pro);
+                //Categorias
+                var categorias = vs.categorias;
+                var categoria = categorias.next();
 
-                //Director
-                var directors = videosystem.directors;
-                var director = directors.next();
-                var aux = -1;
-
-                while (director.done !== true) {
-                    if (director.value.name + " " + director.value.lastname === id) {
-                        aux = director.value;
+                while (categoria.done !== true) {
+                    if ( categoria.name === id) {
+                        vs.assignCategory(categoria.value, pro);
                     }
-                    director = directors.next();
+                    categoria = categorias.next();
                 }
-                videosystem.assignDirector(aux, pro);
-                //
-                //Categorias Seleccionadas
-                var categorias = document.getElementById("tbody").getElementsByTagName('input');
-                var long = categorias.length;
+                
+                //Directores
+                var dirs = document.getElementsByClassName("directores");
+                var long = dirs.length;                
+
+                //console.log("directores= "+long);
 
                 for (var x = 0; x < long; x++) {
                     var found = false;
-                    if (categorias[x].checked) {
-                        var cs = videosystem.categories;
-                        var category = cs.next();
+                    if (dirs[x].checked) {
+                        var directores = vs.directores;
+                        var director = directores.next();
 
                         while (found !== true) {
-                            if (category.value.name === categorias[x].value) {
-                                videosystem.assignCategory(category.value, pro);
+                            if (director.value.name + " " + director.value.lastname1 === dirs[x].value) {
+                                vs.assignDirector(director.value, pro);
                                 found = true;
                             }
-                            category = cs.next();
+                            director = directores.next();
                         }
 
                     }
                 }
                 //
                 //Actores Seleccionados
-                var actores = document.getElementById("tbody2").getElementsByTagName('input');
+                var actores = document.getElementsByClassName("actores");
                 var long = actores.length;
+
+                //console.log("actores = " + actores);
+
+                //console.log("actores= "+long);
+
+
 
                 for (var x = 0; x < long; x++) {
                     var found = false;
+                    //console.log(actores[x] + " is checked = " + actores[x].checked);
                     if (actores[x].checked) {
-                        var actors = videosystem.actors;
+                        var actors = vs.actors;
                         var actor = actors.next();
 
+                        //console.log(actor.value.name + " " + actor.value.lastname1);
+                        //console.log(actores[x].value);
                         while (found !== true) {
-                            if (actor.value.name + " " + actor.value.lastname === actores[x].value) {
-                                videosystem.assignActor(actor.value, pro);
+                            if (actor.value.name + " " + actor.value.lastname1 === actores[x].value) {
+                                //console.log("Está entrando en assignActor");
+                                vs.assignActor(actor.value, pro);
                                 found = true;
                             }
                             actor = actors.next();
@@ -1246,22 +1236,20 @@ function CreateProduction() {
 
                     }
                 }
-                //
-                resultForm(true);
+
             }
             document.forms["proForm"].reset();
-            event.preventDefault();
         }
     }
 
     return function () {
-        var divForm = document.getElementById("sct1");
+        var main = document.getElementById("div-main");
 
-        removeChildsElement(divForm);
+        removeChildren(main);
 
         var h2 = document.createElement("h2");
         h2.appendChild(document.createTextNode("Añadir producción"));
-        divForm.appendChild(h2);
+        main.appendChild(h2);
 
         var form = document.createElement("form");
         form.setAttribute("id", "form");
@@ -1270,22 +1258,400 @@ function CreateProduction() {
         form.setAttribute("data-toggle", "validator");
         form.setAttribute("novalidate", "true");
         form.setAttribute("method", "post");
+        main.appendChild(form);
 
-        createInput("Título", "title", form, "Titulo de la producción", "required");
-        createDate("F. Publicacion", "publication", form, "required");
-        createInput("Imagen", "image", form, "Imagen de la producción", "", "I");
-        createInput("Nacionalidad", "nationality", form, "Ej. 'ES'", "", "D");
-        createInput("Sinopsis", "synopsis", form, "Resumen de la producción");
-        createSelect(form, "Directors", "selectPrin", "Director");
-        createTable("Categorias", "categories", form);
-        createTable("Actores", "actors", form);
-        createButton(addProduction, form);
+        var formGroup1 = document.createElement("div");
+        formGroup1.setAttribute("class","form-group");
+        form.appendChild(formGroup1);
+
+        var title = document.createElement("label");
+        title.appendChild(document.createTextNode("Título *:"));
+        title.setAttribute("class","control-label col-sm-2");
+        formGroup1.appendChild(title);
+
+        var div1 = document.createElement("div");
+        div1.setAttribute("class","col-sm-10");
+        formGroup1.appendChild(div1);
+
+        var input1 = document.createElement("input");
+        input1.setAttribute("type", "text");
+        input1.setAttribute("class", "form-control");
+        input1.setAttribute("name", "title");
+        input1.setAttribute("id", "title");
+        input1.setAttribute("placeholder", "Meter el título");
+        div1.appendChild(input1);
+
+        var formGroup2 = document.createElement("div");
+        formGroup2.setAttribute("class","form-group");
+        form.appendChild(formGroup2);
+
+        var publication = document.createElement("label");
+        publication.appendChild(document.createTextNode("Fecha de publicación*:"));
+        publication.setAttribute("class","control-label col-sm-2");
+        formGroup2.appendChild(publication);
+
+        var div2 = document.createElement("div");
+        div2.setAttribute("class","col-sm-10");
+        formGroup2.appendChild(div2);
+
+        var date = document.createElement("input");
+        date.setAttribute("type", "text");
+        date.setAttribute("class", "form-control");
+        date.setAttribute("name", "publication");
+        date.setAttribute("id", "publication");
+        //date.setAttribute("placeholder", "Meter el primer apellido");
+        div2.appendChild(date);
+
+        var formGroup3 = document.createElement("div");
+        formGroup3.setAttribute("class","form-group");
+        form.appendChild(formGroup3);
+
+        var img = document.createElement("label");
+        img.appendChild(document.createTextNode("Imagen:"));
+        img.setAttribute("class","control-label col-sm-2");
+        formGroup3.appendChild(img);
+
+        var div3 = document.createElement("div");
+        div3.setAttribute("class","col-sm-10");
+        formGroup3.appendChild(div3);
+
+        var input3 = document.createElement("input");
+        input3.setAttribute("type", "text");
+        input3.setAttribute("class", "form-control");
+        input3.setAttribute("name", "img");
+        input3.setAttribute("id", "img");
+        input3.setAttribute("placeholder", "Meter la ruta de la imagen");
+        div3.appendChild(input3);
+
+        var formGroup4 = document.createElement("div");
+        formGroup4.setAttribute("class","form-group");
+        form.appendChild(formGroup4);
+
+        var nat = document.createElement("label");
+        nat.appendChild(document.createTextNode("Nacionalidad:"));
+        nat.setAttribute("class","control-label col-sm-2");
+        formGroup4.appendChild(nat);
+
+        var div4 = document.createElement("div");
+        div4.setAttribute("class","col-sm-10");
+        formGroup4.appendChild(div4);
+
+        var input4 = document.createElement("input");
+        input4.setAttribute("type", "text");
+        input4.setAttribute("class", "form-control");
+        input4.setAttribute("name", "nationality");
+        input4.setAttribute("id", "nationality");
+        input4.setAttribute("placeholder", "El sitio donde se rodó");
+        div4.appendChild(input4);
+
+        var formGroup5 = document.createElement("div");
+        formGroup5.setAttribute("class","form-group");
+        form.appendChild(formGroup5);
+
+        var syn = document.createElement("label");
+        syn.appendChild(document.createTextNode("Sinposis:"));
+        syn.setAttribute("class","control-label col-sm-2");
+        formGroup5.appendChild(syn);
+
+        var div5 = document.createElement("div");
+        div5.setAttribute("class","col-sm-10");
+        formGroup5.appendChild(div5);
+
+        var area = document.createElement("textarea");
+        area.setAttribute("class", "form-control");
+        area.setAttribute("name", "synopsis");
+        area.setAttribute("id", "synopsis");
+        area.setAttribute("placeholder", "Poner la descripción");
+        div5.appendChild(area);
+
+        var formGroup6 = document.createElement("div");
+        formGroup6.setAttribute("class","form-group group-login");
+        form.appendChild(formGroup6);
+
+        var cat = document.createElement("label");
+        cat.setAttribute("class", "control-label col-sm-2");
+        cat.appendChild(document.createTextNode("Categoría:"));
+        formGroup6.appendChild(cat);
+
+        var div6 = document.createElement("div");
+        div6.setAttribute("class", "col-sm-5");
+        formGroup6.appendChild(div6);
+
+        var select = document.createElement("select");
+        select.setAttribute("class", "form-control");
+        select.setAttribute("name", "cat");
+        select.setAttribute("id", "cat");
+        div6.appendChild(select);
+
+        var categorias = vs.categorias;
+        var categoria = categorias.next();
+
+        while (categoria.done !== true) {
+            var option = document.createElement("option");
+            option.appendChild(document.createTextNode(categoria.value.name));
+            option.setAttribute("value", categoria.value.name);
+            select.appendChild(option);
+
+            categoria = categorias.next();
+        }
+        //tabla para los directores
+        var formGroup7 = document.createElement("div");
+        formGroup7.setAttribute("class", "form-group");
+        form.appendChild(formGroup7);
+
+        var dir = document.createElement("label");
+        dir.setAttribute("class", "control-label col-sm-2");
+        dir.appendChild(document.createTextNode("Directores :"));
+        formGroup7.appendChild(dir);
+
+        var div7 = document.createElement("div");
+        div7.setAttribute("class", "col-sm-4");
+        formGroup7.appendChild(div7);
+
+        var table = document.createElement("table");
+        table.setAttribute("class", "table table-striped");
+        div7.appendChild(table);
+
+        var tbody = document.createElement("tbody");
+        tbody.setAttribute("id", "tbody");
+        table.appendChild(tbody);
+
+        var directores = vs.directores;
+        var director = directores.next();
+        
+        while (director.done !== true) {
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            tr.appendChild(td1);
+
+            var check = document.createElement("input");
+            check.setAttribute("type", "checkbox");
+            check.setAttribute("class", "directores");
+            check.setAttribute("name", "director");
+            check.setAttribute("value", director.value.name + " " + director.value.lastname1);
+            td1.appendChild(check);
+
+            var td2 = document.createElement("td");
+            td2.appendChild(document.createTextNode(director.value.name + " " + director.value.lastname1));
+            tr.appendChild(td2);
+            tbody.appendChild(tr);
+
+            director = directores.next();
+        }
+        //tabla para los actores
+        var formGroup8 = document.createElement("div");
+        formGroup8.setAttribute("class", "form-group");
+        form.appendChild(formGroup8);
+
+        var act = document.createElement("label");
+        act.setAttribute("class", "control-label col-sm-2");
+        act.appendChild(document.createTextNode("Actores :"));
+        formGroup8.appendChild(act);
+
+        var div8 = document.createElement("div");
+        div8.setAttribute("class", "col-sm-4");
+        formGroup8.appendChild(div8);
+
+        var table = document.createElement("table");
+        table.setAttribute("class", "table table-striped");
+        div8.appendChild(table);
+
+        var tbody = document.createElement("tbody");
+        table.appendChild(tbody);
+
+        var actors = vs.actors;
+        var actor = actors.next();
+
+        while (actor.done !== true) {
+            var tr = document.createElement("tr");
+            tbody.appendChild(tr);
+
+            var td1 = document.createElement("td");
+            tr.appendChild(td1);
+
+            var check = document.createElement("input");
+            check.setAttribute("type", "checkbox");
+            check.setAttribute("class", "actores");
+            check.setAttribute("name", "actor");
+            check.setAttribute("value", actor.value.name + " " + actor.value.lastname1);
+            td1.appendChild(check);
+
+            var td2 = document.createElement("td");
+            td2.appendChild(document.createTextNode(actor.value.name + " " + actor.value.lastname1));
+            tr.appendChild(td2);
+            
+            actor = actors.next();
+        }
+
+        var div9 = document.createElement("div");
+        div9.setAttribute("class","col-sm-10");
+        form.appendChild(div9);
+
+        var btn = document.createElement("button");
+        btn.setAttribute("type", "button");
+        btn.setAttribute("id", "btn-login");
+        btn.setAttribute("class", "btn btn-default btnInfo")
+        btn.appendChild(document.createTextNode("Guardar"));
+        btn.addEventListener("click", newProduction())
+        div9.appendChild(btn);
 
         var p = document.createElement("p");
         p.setAttribute("id", "result");
-        p.setAttribute("class", "h2");
         form.appendChild(p);
 
-        divForm.appendChild(form);
+    }
+}
+//Clases para modificar 
+function ModCategory() {
+
+    function modCategory() {
+        return function () {
+            var form = document.forms["catForm"]["selectPrin"];
+            var id = form.options[form.options.selectedIndex].text;
+            var name = document.forms["catForm"]["name"].value;
+            var description = document.forms["catForm"]["description"].value;
+
+            if (name == "" || id == "") {
+                throw new EmptyValueException();
+            } else {
+                var categorias = vs.categorias;
+                var categoria = categorias.next();
+
+                while (categoria.done !== true) {
+                    if (categoria.value.name === id) {
+                        categoria.value.name = name;
+                        categoria.value.description = description;
+                    }
+                    categoria = categorias.next();
+                }
+
+            }
+            form.options[form.options.selectedIndex].text = name;
+        }
+    }
+
+    return function () {
+        var main = document.getElementById("div-main");
+
+        removeChildren(main);
+
+        var h2 = document.createElement("h2");
+        h2.appendChild(document.createTextNode("Modificar categoría"));
+        main.appendChild(h2);
+
+        var form = document.createElement("form");
+        form.setAttribute("name", "catForm");
+        form.setAttribute("class", "form-horizontal");
+        form.setAttribute("data-toggle", "validator");
+        form.setAttribute("novalidate", "true");
+        form.setAttribute("method", "post");
+        main.appendChild(form);
+
+        var formGroup1 = document.createElement("div");
+        formGroup1.setAttribute("class","form-group group-login");
+        form.appendChild(formGroup1);
+
+        var label = document.createElement("label");
+        label.setAttribute("class", "control-label col-sm-2");
+        label.appendChild(document.createTextNode("Categoría a modificar:"));
+        formGroup1.appendChild(label);
+
+        var div = document.createElement("div");
+        div.setAttribute("class", "col-sm-5");
+        formGroup1.appendChild(div);
+
+        var select = document.createElement("select");
+        select.setAttribute("class", "form-control");
+        select.setAttribute("name", "cat-delt");
+        div.appendChild(select);
+
+        var categorias = vs.categorias;
+        var categoria = categorias.next();
+
+        while (categoria.done !== true) {
+            var option = document.createElement("option");
+            option.appendChild(document.createTextNode(categoria.value.name));
+            option.setAttribute("value", categoria.value.name);
+            select.appendChild(option);
+
+            categoria = categorias.next();
+        }
+        var formGroup2 = document.createElement("div");
+        formGroup2.setAttribute("class","form-group");
+        form.appendChild(formGroup2);
+
+        var name = document.createElement("label");
+        name.appendChild(document.createTextNode("Nombre*:"));
+        name.setAttribute("class","control-label col-sm-2");
+        formGroup2.appendChild(name);
+
+        var div2 = document.createElement("div");
+        div2.setAttribute("class","col-sm-10");
+        formGroup2.appendChild(div2);
+
+        var input1 = document.createElement("input");
+        input1.setAttribute("type", "text");
+        input1.setAttribute("class", "form-control");
+        input1.setAttribute("name", "name");
+        input1.setAttribute("id", "name");
+        input1.setAttribute("placeholder", "Poner el nombre");
+        div2.appendChild(input1);
+
+        var formGroup3 = document.createElement("div");
+        formGroup3.setAttribute("class","form-group");
+        form.appendChild(formGroup3);
+
+        var des = document.createElement("label");
+        des.appendChild(document.createTextNode("Descripción:"));
+        des.setAttribute("class","control-label col-sm-2");
+        formGroup3.appendChild(des);
+
+        var div3 = document.createElement("div");
+        div3.setAttribute("class","col-sm-10");
+        formGroup3.appendChild(div3);
+
+        var area2 = document.createElement("textarea");
+        area2.setAttribute("type", "text area");
+        area2.setAttribute("class", "form-control");
+        area2.setAttribute("name", "description");
+        area2.setAttribute("id", "description");
+        area2.setAttribute("placeholder", "Poner la descripción");
+        div3.appendChild(area2);
+
+        var div4 = document.createElement("div");
+        div4.setAttribute("class","col-sm-10");
+        form.appendChild(div4);
+
+        var btn = document.createElement("button");
+        btn.setAttribute("type", "button");
+        btn.setAttribute("id", "btn-login");
+        btn.setAttribute("class", "btn btn-default btnInfo")
+        btn.appendChild(document.createTextNode("Guardar"));
+        btn.addEventListener("click", modCategory())
+        div4.appendChild(btn);
+
+        var p = document.createElement("p");
+        p.setAttribute("id", "result");
+        form.appendChild(p);
+
+        //actCat();
+    }
+    function actCat() {
+        var form = document.getElementById("sel");
+    
+        var id = form.options[form.options.selectedIndex].text;
+    
+        var categories = vs.categories;
+        var category = categories.next();
+        var found = false;
+    
+        while (found !== true) {
+            if (category.value.name === id) {
+                document.forms["catForm"]["name"].value = category.value.name;
+                document.forms["catForm"]["description"].value = category.value.description;
+                found = true;
+            }
+            category = categories.next();
+        }
     }
 }

@@ -112,6 +112,7 @@ function crearObjetos(){
 
 
 function showHomePage(){
+
     //Borro lo que haya en el main
     var main = document.getElementById("div-main");
     removeChildren(main);
@@ -251,13 +252,12 @@ function showHomePage(){
 }
 function categoriesMenuPopulate(){
     //Recorremos las categorias.
-    var ini = document.getElementsByClassName("navbar-brand");
     var ul = document.getElementsByClassName("submenu");
 
-    //removeChildren(ul);
-
-    ini[0].addEventListener("click", showHomePage());
-
+    if(ul[0].children.length !== 0){
+        removeChildren(ul[0]);
+    }
+    
     var categorias = vs.categorias;
     var categoria = categorias.next();
 
@@ -935,8 +935,7 @@ function removeChildren(elem) {
         elem.removeChild(elem.children[i]);
     }
 }
-
-function initPopulate() {
+function menu(){
     //Creo los eventos que de si pulsan el menú 
     var actores = document.getElementById("actores");
     actores.addEventListener("click", showActors());
@@ -944,15 +943,20 @@ function initPopulate() {
     directores.addEventListener("click", showDirectors());
     var producciones = document.getElementById("producciones");
     producciones.addEventListener("click", showProductions());
+    var categorias= document.getElementById("producciones");
+    categorias.addEventListener("click", categoriesMenuPopulate());
+
     var login = document.getElementById("login");
     login.addEventListener("click", Login());
+
+}
+function initPopulate() {
     //Método para crear los objetos
     crearObjetos();
-    //Llamo al método para poder desplegar el menu categoría
-    categoriesMenuPopulate();
     //Llamo al método para que se vean las categorías en el main
     showHomePage();
-
+    //Las funciones del menu
+    menu();
 }
 
 window.onload = initPopulate;
