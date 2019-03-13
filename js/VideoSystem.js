@@ -278,29 +278,27 @@ var VideoSystem = (function () { //La función anónima devuelve un método getI
 				}
 				//Si todo va bien añado la producción.
 				var post = getProductionPosition(production);//Busco el indice del elemento que me han pasado.
-				
 				var cast = this.getCast(production);
-                var dp = getDirectorPosition(cast.director.director);
-				var acPost = getActorPosition(cast.actors[i].actor);
-				var actPro = getProPosition(production, _actors[acPost].productions);
-
-                for (var i = 0; i < cast.actors.length; i++) {
+                
+                for (var i = 0; i < cast.actores.length; i++) {
+					var actPost = getActorPosition(cast.actores[i]);
+					var actPro = getProPosition(production, _actors[actPost].aProductions.Production);
                     if (actPro !== -1) {
-                        _actors[acPost].productions.splice(actPro, 1);
+                        _actors[actPost].aProductions.Production.splice(actPro, 1);
                     }
                 }
-
-                var dirPro = getProPosition(production, _directors[dp].productions);
+				/*var dp = getDirectorPosition(cast.directores[i]);
+                var dirPro = getProPosition(production, _directors[dp].dProductions);
                 if (dirPro !== -1) {
-                    _directors[dp].productions.splice(dirPro, 1);
+                    _directores[dp].dProductions.splice(dirPro, 1);
                 }
 
                 for (var i = 0; i< _categories.length; i++){
-                    var pos = getProPosition(production, _categories[i].productions);
+                    var pos = getProPosition(production, _categories[i].cProductions);
                     if ( pos !== -1){
-                        _categories[i].productions.splice(pos, 1);
+                        _categories[i].cProductions.splice(pos, 1);
                     }
-                }
+                }*/
 
                 _productions.splice(post,1);
 				//Devuelvo el número de elementos del array de producciones.

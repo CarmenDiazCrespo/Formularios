@@ -568,6 +568,7 @@ function DeltPro(){
         return function () {
             var select = document.forms["delt-pro"]["pro-delt"];
             var valuePro = select.value;
+            console.log("valuePro "+valuePro);
             var p = document.getElementById("result");
 
             if (valuePro == "") {
@@ -580,9 +581,10 @@ function DeltPro(){
                 var production = productions.next();
 
                 while (production.done !== true) {
-                    if(valuePro === production.value.name){
+                    console.log("Nombre de la produccion:"+production.value.title);
+                    if(valuePro === production.value.title){
+                        console.log("Nombre de la produccion a eliminar:"+production.value.title);
                         vs.removeProduction(production.value);
-                        
                     }
                     production = productions.next();
                 }
