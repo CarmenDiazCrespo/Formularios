@@ -278,27 +278,33 @@ var VideoSystem = (function () { //La función anónima devuelve un método getI
 				}
 				//Si todo va bien añado la producción.
 				var post = getProductionPosition(production);//Busco el indice del elemento que me han pasado.
-				var cast = this.getCast(production);
+				var iterador = this.getCast(production);
                 
-                for (var i = 0; i < cast.actores.length; i++) {
-					var actPost = getActorPosition(cast.actores[i]);
-					var actPro = getProPosition(production, _actors[actPost].aProductions.Production);
+                for (var i = 0; i < iterador.actores.length; i++) {
+					//console.log(iterador.actores[i].actor.name);
+					var actPosition = getActorPosition(iterador.actores[i].actor);
+					//console.log(" Posición del actor "+actPosition);
+					var actPro = getProPositionActor(production, _actors[actPosition].aProductions);
+					//console.log(" Posición de la producción dentro del actor "+actPro);
                     if (actPro !== -1) {
-                        _actors[actPost].aProductions.Production.splice(actPro, 1);
+                        _actors[actPosition].aProductions.splice(actPro, 1);
                     }
-                }
-				/*var dp = getDirectorPosition(cast.directores[i]);
-                var dirPro = getProPosition(production, _directors[dp].dProductions);
-                if (dirPro !== -1) {
-                    _directores[dp].dProductions.splice(dirPro, 1);
-                }
-
-                for (var i = 0; i< _categories.length; i++){
-                    var pos = getProPosition(production, _categories[i].cProductions);
-                    if ( pos !== -1){
-                        _categories[i].cProductions.splice(pos, 1);
+				}
+				
+				for (var i = 0; i < iterador.directores.length; i++) {
+					//console.log(iterador.directores[i].director.name);
+					var dp = getDirectorPosition(iterador.directores[i].director);
+                	var dirPro = getProPosition(production, _directores[dp].dProductions);
+                    if (dirPro !== -1) {
+                        _directores[dp].dProductions.splice(dirPro, 1);
                     }
-                }*/
+				}
+				for (var i = 0; i< _categorias.length; i++){
+					var catPos = getProPosition(production, _categorias[i].cProductions);
+					if ( catPos !== -1){
+						_categorias[i].cProductions.splice(catPos, 1);
+					}
+				}
 
                 _productions.splice(post,1);
 				//Devuelvo el número de elementos del array de producciones.

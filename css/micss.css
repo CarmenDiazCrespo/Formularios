@@ -42,11 +42,12 @@
     height: 50px;
     width: auto;
 }
-main{
+#grande{
     margin-bottom: 5%;
     min-height:calc(100vh - 15rem - 400px);
-	margin-left: 10%;
-	margin-right: 10%;
+	margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 0;
 	
 }
 .redes-sociales{
@@ -134,7 +135,11 @@ header a{
 .div-btn-form{
    position: absolute;
 }
-#nav-forms{
+#grande{
     display: flex;
-    justify-content: left;
+    justify-content: space-around;
+}
+#nav-forms{
+    width: 13%;
+    margin-right: 2.5%;
 }
